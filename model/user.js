@@ -17,7 +17,7 @@ const userSchema=new Schema({
     },
     email:{
         type:String,
-        minLength:5,
+        minLength:3,
         required:true,
     },
     password:{

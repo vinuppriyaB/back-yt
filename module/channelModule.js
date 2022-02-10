@@ -4,7 +4,7 @@ var ObjectId = require('mongodb').ObjectID;
 const { response } = require("express");
 
 exports.postchannel = async(req,res,next)=>{
-    console.log(req.body)
+    // console.log(req.body)
     const channel = new Channel({
         channelName:req.body.channelName,
     email:req.body.email,
@@ -15,23 +15,24 @@ exports.postchannel = async(req,res,next)=>{
     })
 
     const updatedDoc= await channel.save();
+    // console.log(updatedDoc)
 res.send(updatedDoc);
 } 
 
 exports.postvideo = async(req,res,next)=>{
-console.log(req.body)
+// console.log(req.body)
     const newvideo = {
 
         
-        title:req.body.video[0].title,
+        title:req.body.title,
         timestamp:new Date(),
-        imageLink:req.body.video[0].imageLink,
-        videoLink:req.body.video[0].videoLink,
+        imageLink:req.body.imageLink,
+        videoLink:req.body.videoLink,
         views:0,
         like:0,
         dislike:0,
-        description:req.body.video[0].description,  
-        tag:req.body.video[0].tags
+        description:req.body.description,  
+        tag:req.body.tags
 
    
     }
@@ -47,10 +48,6 @@ console.log(updatedDoc)
     res.status(200).send({msg:"insert successfully"}) ;
     else
     res.status(400).send({msg:"can't find the document"}) ;
-
-    
-    
-    
     
 } 
 
@@ -61,7 +58,7 @@ console.log(updatedDoc)
 
 exports.searchchannel = async(req,res,next)=>{
     const channelName=req.params.channelName;
-    console.log(channelName)
+    // console.log(channelName)
    let response= await Channel.findOne({channelName:channelName}).exec();
    console.log(response)
 //    if(response)
@@ -184,7 +181,7 @@ exports.updateLike = async(req,res,next)=>{
 
 exports.updatedisLike = async(req,res,next)=>{
     const {id,channelName,title,clicked}=req.body;
-    console.log(id,channelName)
+    // console.log(id,channelName)
     await Channel.findOne({channelName:channelName},(error,result)=>{
             if(error)
             console.log(error);
@@ -221,7 +218,7 @@ exports.updatedisLike = async(req,res,next)=>{
 
 exports.updateview = async(req,res,next)=>{
     const {id,channelName,title,clicked}=req.body;
-    console.log(id,channelName)
+    // console.log(id,channelName)
     await Channel.findOne({channelName:channelName},(error,result)=>{
             if(error)
             console.log(error);
@@ -272,10 +269,10 @@ console.log(comment)
                
                 for(let i=0;i<result.video.length;i++)
                 {
-                    console.log(result.video[i].title)
+                    // console.log(result.video[i].title)
                     if(result.video[i].title==req.body.videotitle)
                     {
-                        console.log("true")
+
                        result.video[i].comment.push(comment)
                        break;
                         
@@ -296,7 +293,7 @@ console.log(comment)
 
 exports.getcomment = async(req,res,next)=>{
     const id=req.params.id;
-    console.log(id)
+    // console.log(id)
     let response= await Channel.aggregate([
         {
             $unwind:
@@ -321,15 +318,14 @@ exports.getcomment = async(req,res,next)=>{
        ]);
     //    console.log(response)
         res.send(response);
-    console.log(req.params.id)
-
+    
 }
 
 exports.postreply = async(req,res,next)=>{
     // res.send(req.body);
 
     let {channelName,videotitle,commentText,replyText}=req.body;
-    console.log(channelName,videotitle,commentText,replyText);
+    // console.log(channelName,videotitle,commentText,replyText);
     const reply={
         email:req.body.email,
         text:req.body.replyText,
@@ -337,7 +333,7 @@ exports.postreply = async(req,res,next)=>{
         like:req.body.like,
         dislike:req.body.dislike
     }
-    console.log(reply)
+    // console.log(reply)
     await Channel.findOne({channelName:channelName},(error,result)=>{
         if(error)
         console.log(error);
@@ -355,9 +351,9 @@ exports.postreply = async(req,res,next)=>{
 
                         if(result.video[i].comment[j].text==commentText)
                         {
-                            console.log(result.video[i].comment[j].text)
+                            // console.log(result.video[i].comment[j].text)
                             result.video[i].comment[j].reply.push(reply)
-                            console.log(result.video[i].comment[j].reply)
+                            // console.log(result.video[i].comment[j].reply)
                             break;
                         }
                     }
@@ -383,7 +379,7 @@ exports.postreply = async(req,res,next)=>{
 
 exports.getreply = async(req,res,next)=>{
      const {id1,id2}=req.params;
-    console.log(req.params)
+    // console.log(req.params)
     let response= await Channel.aggregate([
         {
             $unwind:
@@ -431,7 +427,7 @@ exports.getreply = async(req,res,next)=>{
 
 exports.updateCommentLike = async(req,res,next)=>{
     const {id,channelName,title,commentText,clicked}=req.body;
-    console.log(id,channelName)
+    // console.log(id,channelName)
     await Channel.findOne({channelName:channelName},(error,result)=>{
             if(error)
             console.log(error);
@@ -442,20 +438,68 @@ exports.updateCommentLike = async(req,res,next)=>{
                 {
 
                     if(result.video[i].title==title)
-                    {console.log(result.video[i].title)
+                    {
+                        // console.log(result.video[i].title)
                         for(let j=0;j<result.video[i].comment.length;j++)
                         {
                             
                             if(result.video[i].comment[j].text==commentText)
                             {
-                                console.log(result.video[i].comment[j].text)
-                                console.log(clicked)
+                                // console.log(result.video[i].comment[j].text)
+                                // console.log(clicked)
                                 if(clicked)
                                 {
                                     result.video[i].comment[j].like+=1;
                                 }
                                 else{
                                     result.video[i].comment[j].like-=1;
+                                }
+                            }
+                        }
+                            
+                    }
+                }
+                result.save((error,updatedata)=>{
+                    if(error)
+                console.log(error);
+                else{
+                    res.send(updatedata)
+                }
+                })
+            }
+        }
+
+    ).clone();
+}
+
+exports.updateCommentDisLike = async(req,res,next)=>{
+    const {id,channelName,title,commentText,clicked}=req.body;
+    // console.log(id,channelName)
+    await Channel.findOne({channelName:channelName},(error,result)=>{
+            if(error)
+            console.log(error);
+            else{
+
+               
+                for(let i=0;i<result.video.length;i++)
+                {
+
+                    if(result.video[i].title==title)
+                    {
+                        // console.log(result.video[i].title)
+                        for(let j=0;j<result.video[i].comment.length;j++)
+                        {
+                            
+                            if(result.video[i].comment[j].text==commentText)
+                            {
+                                // console.log(result.video[i].comment[j].text)
+                                // console.log(clicked)
+                                if(clicked)
+                                {
+                                    result.video[i].comment[j].dislike+=1;
+                                }
+                                else{
+                                    result.video[i].comment[j].dislike-=1;
                                 }
                             }
                         }

@@ -5,10 +5,10 @@ const jwt=require("jsonwebtoken");
 
 exports.signup = async(req,res,next)=>{
     const schema=joi.object({
-        firstName:joi.string().min(3).max(15).required(),
-        lastName:joi.string().min(3).max(15).required(),
-        email:joi.string().min(3).max(15).required(),
-        password:joi.string().min(3).max(15).required(),
+        firstName:joi.string().min(3).required(),
+        lastName:joi.string().min(3).required(),
+        email:joi.string().min(3).required(),
+        password:joi.string().min(3).required(),
         profilePic:joi.string(),
     })
     var {error}= await schema.validate(req.body);
@@ -35,9 +35,10 @@ exports.signup = async(req,res,next)=>{
 }
 
 exports.signin = async(req,res,next)=>{
+    console.log(req.body)
     const schema=joi.object({
         
-        email:joi.string().min(5).max(15).required(),
+        email:joi.string().min(3).max(15).required(),
         password:joi.string().min(3).max(15).required(),
         
     })
@@ -47,6 +48,7 @@ exports.signin = async(req,res,next)=>{
        return res.status(400).send({msg:error.details[0].message});
     }
     var existUser= await User.findOne({"email":req.body.email}).exec();
+    console.log(existUser)
     if(!existUser) return res.status(400).send({msg:"email not register"});
     
     const isvalid=await bcrypt.compare(req.body.password,existUser.password);

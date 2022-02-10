@@ -16,7 +16,7 @@ router.get('/getcomment/:id',channelModule.getcomment);
 router.get('/getreply/:id1/:id2',channelModule.getreply);
 router.post('/postreply',channelModule.postreply);
 router.put('/updateCommentLike',channelModule.updateCommentLike);
-
+router.put('/updateCommentDisLike',channelModule.updateCommentDisLike);
 router.put('/updatedisLike',channelModule.updatedisLike);
 router.put('/updateview',channelModule.updateview);
 

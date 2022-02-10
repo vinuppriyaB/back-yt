@@ -35,11 +35,11 @@ exports.signup = async(req,res,next)=>{
 }
 
 exports.signin = async(req,res,next)=>{
-    console.log(req.body)
+    // console.log(req.body)
     const schema=joi.object({
         
-        email:joi.string().min(3).max(15).required(),
-        password:joi.string().min(3).max(15).required(),
+        email:joi.string().min(3).required(),
+        password:joi.string().min(3).required(),
         
     })
     var {error}= await schema.validate(req.body);
@@ -178,7 +178,7 @@ exports.unsubscribechannel = async(req,res,next)=>{
 exports.getsubscribechannel = async(req,res,next)=>{
     
     const {email}=req.params;
-    console.log(email);
+    // console.log(email);
     const response= await User.findOne({email:email},(error,result)=>{
         if(error){
             res.status(400).send({msg:error})
